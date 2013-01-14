@@ -13,7 +13,6 @@ var browsers = {};
 function theloop(browser, response, username, password, loop) {
   switch (browser.text('title')) {
     case 'Common Timetable':
-      console.log('### Finding events ###');
       if (!browser.query('#btnTempViewYear')) {
         console.warn("Common page seems incorrect");
         sendDebug(browser, response);
@@ -42,7 +41,6 @@ function theloop(browser, response, username, password, loop) {
         return;
       }
 
-      console.log('### Logging in ###');
       browser
         .fill("j_username", username)
         .fill("j_password", password)
@@ -50,7 +48,6 @@ function theloop(browser, response, username, password, loop) {
       break;
     case '':
       if (browser.queryAll('noscript').length == 2) {
-        console.log('### Pressing continue ###');
         browser.document.forms[0].submit();
         browser.wait().then(loop.bind(this, loop));
       } else {
@@ -98,13 +95,14 @@ http.createServer(function(request, response) {
   var browser = browsers[username];
 
   var loop = theloop.bind(this, browser, response, username, password);
-  browser.visit("login.do", loop.bind(this, loop));
+  browser.visit("login.do", function() {
+    console.log((new Date()) + ": Fetching started");
+    loop(loop);
+  });
 }).listen(process.env.npm_package_config_port);
 
 function parseEvents(browser) {
   var ical = new icalendar.iCalendar();
-
-  console.log("## Got events page ##");
 
   if (weeks.length == 0) {
     console.log("## Extracting week dates ##");
@@ -117,7 +115,6 @@ function parseEvents(browser) {
     });
   }
 
-  console.log("## Extracting event info ##");
   browser.queryAll('.event').forEach(function(e) {
     var type = e.querySelector('.type').textContent.trim().toLowerCase();
     var module = e.querySelector('.module').textContent.trim();
@@ -128,8 +125,6 @@ function parseEvents(browser) {
 
     var time = e.nextSibling.nextSibling.querySelector('.time').textContent.trim();
     var weeks = parseWeeks(e.querySelector('.weeks').textContent);
-
-    console.log("## Found event " + sname + " " + type + " ##");
 
     weeks.forEach(function(week) {
       var at = resolveTime(week, time);
