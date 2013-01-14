@@ -63,7 +63,7 @@ function theloop(browser, response, username, password, loop) {
   return false;
 }
 
-var allowAny = !!process.env_npm_package_config_username;
+var allowAny = !!process.env['UCL_USERNAME'];
 http.createServer(function(request, response) {
   var header = request.headers['authorization'] || '',
       token = header.split(/\s+/).pop() || '',
@@ -73,8 +73,8 @@ http.createServer(function(request, response) {
       password = parts[1];
 
   if (!allowAny || !username  || !password) {
-    username = process.env.npm_package_config_username;
-    password = process.env.npm_package_config_password;
+    username = process.env['UCL_USERNAME'];
+    password = process.env['UCL_PASSWORD'];
 
     if (!username || !password) {
       if (allowAny) {

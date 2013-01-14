@@ -1,6 +1,6 @@
 {
   "name": "ucltt-ics",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "author": "Jon Gjengset <jon@thesquareplanet.com>",
   "description": "Fetches your UCL timetable and presents it in the iCalendar format",
   "scripts": {
@@ -13,10 +13,6 @@
   "dependencies" : {
     "zombie"   : "1.4",
     "icalendar": "0.6"
-  },
-  "config" : {
-    "username" : false,
-    "password" : false
   },
   "license": "MIT",
   "engines": {
