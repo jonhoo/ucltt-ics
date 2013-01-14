@@ -3,6 +3,8 @@ UCL so that it can be synced to "normal" calendar software. It is fairly crude,
 but seems to work mostly the way it should. Username and password is set in
 config or passed through HTTP basic authentication.
 
+If a username is set in the config, HTTP basic auth is completely disabled.
+
 If you want to use this with Google Calendar which doesn't support HTTP Basic
 Auth, you should just set a fixed username and password in the config.
 

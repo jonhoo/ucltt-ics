@@ -29,10 +29,14 @@ function theloop(browser, response, username, password, loop) {
     case 'UCL Single Sign-on':
       if (browser.query('#main').textContent.indexOf('Authentication failed') > -1) {
         console.warn("*** Authentication failed ***");
-        response.writeHead(401, {
-          "WWW-Authenticate": 'Basic realm="UCL Timetable"',
-          "Content-Type": "text/plain"
-        });
+        if (allowAny) {
+          response.writeHead(401, {
+            "WWW-Authenticate": 'Basic realm="UCL Timetable"',
+            "Content-Type": "text/plain"
+          });
+        } else {
+          response.writeHead(403, {"Content-Type": "text/plain"});
+        }
         response.write("Authentication with UCL failed")
         response.end();
         return;
@@ -61,6 +65,7 @@ function theloop(browser, response, username, password, loop) {
   return false;
 }
 
+var allowAny = !!process.env_npm_package_config_username;
 http.createServer(function(request, response) {
   var header = request.headers['authorization'] || '',
       token = header.split(/\s+/).pop() || '',
@@ -69,12 +74,17 @@ http.createServer(function(request, response) {
       username = parts[0],
       password = parts[1];
 
-  if (!username  || !password) {
+  if (!allowAny || !username  || !password) {
     username = process.env.npm_package_config_username;
     password = process.env.npm_package_config_password;
 
     if (!username || !password) {
-      response.writeHead(401, {"WWW-Authenticate": 'Basic realm="UCL Timetable"'});
+      if (allowAny) {
+        response.writeHead(401, {"WWW-Authenticate": 'Basic realm="UCL Timetable"'});
+      } else {
+        response.writeHead(403, {"Content-Type": "text/plain"});
+        response.write("Random access not allowed, but no username/password given in config");
+      }
       response.end();
       return;
     }
