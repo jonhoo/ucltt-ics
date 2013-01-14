@@ -68,17 +68,22 @@ http.createServer(function(request, response) {
       username = parts[0],
       password = parts[1];
 
-  if (username == '' || password == '') {
-    response.writeHead(401, {"WWW-Authenticate": 'Basic realm="UCL Timetable"'});
-    response.end();
-    return;
+  if (!username  || !password) {
+    username = process.env.npm_package_config_username;
+    password = process.env.npm_package_config_password;
+
+    if (!username || !password) {
+      response.writeHead(401, {"WWW-Authenticate": 'Basic realm="UCL Timetable"'});
+      response.end();
+      return;
+    }
   }
 
   response.writeHead(200, {"Content-Type": "text/plain"});
   var browser = new Browser();
   var loop = theloop.bind(this, browser, response, username, password);
   browser.visit("login.do", loop.bind(this, loop));
-}).listen(8888);
+}).listen(process.env.npm_package_config_port);
 
 function parseEvents(browser) {
   var ical = new icalendar.iCalendar();
