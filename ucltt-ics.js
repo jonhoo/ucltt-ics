@@ -20,6 +20,7 @@ function theloop(browser, response, username, password, loop) {
       }
 
       browser.clickLink('#btnTempViewYear a', function() {
+        response.writeHead(200, {"Content-Type": "text/calendar"});
         var ical = parseEvents(browser);
         response.write(ical.toString());
         response.end();
@@ -87,8 +88,6 @@ http.createServer(function(request, response) {
     }
   }
 
-  response.writeHead(200, {"Content-Type": "text/plain"});
-
   if (!(username in browsers)) {
     browsers[username] = new Browser();
   }
@@ -99,7 +98,7 @@ http.createServer(function(request, response) {
     console.log((new Date()) + ": Fetching started");
     loop(loop);
   });
-}).listen(process.env.npm_package_config_port);
+}).listen(process.env.PORT || 54321)
 
 function parseEvents(browser) {
   var ical = new icalendar.iCalendar();

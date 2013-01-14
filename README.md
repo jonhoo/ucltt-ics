@@ -17,7 +17,7 @@ To run:
     npm config set ucltt-ics:password "your-ucl-password"
     npm start
 
-You will then be able to access the iCalendar at http://yourdomain.com:8888/ and
+You will then be able to access the iCalendar at http://yourdomain.com:54321/ and
 can put that URL straight into your calendaring application to have it synced.
 Beware that since this is doing web scraping, you might not want to scrape it
 too often.
