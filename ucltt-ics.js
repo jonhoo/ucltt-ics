@@ -8,6 +8,7 @@ Browser.waitFor = "3s";
 Browser.runScripts = false;
 
 var weeks = [];
+var browsers = {};
 
 function theloop(browser, response, username, password, loop) {
   switch (browser.text('title')) {
@@ -80,7 +81,12 @@ http.createServer(function(request, response) {
   }
 
   response.writeHead(200, {"Content-Type": "text/plain"});
-  var browser = new Browser();
+
+  if (!(username in browsers)) {
+    browsers[username] = new Browser();
+  }
+  var browser = browsers[username];
+
   var loop = theloop.bind(this, browser, response, username, password);
   browser.visit("login.do", loop.bind(this, loop));
 }).listen(process.env.npm_package_config_port);
