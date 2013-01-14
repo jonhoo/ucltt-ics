@@ -179,8 +179,8 @@ function resolveTime(week, time) {
       em = parseInt(times[1][1], 10);
 
   return [
-    new Date(day.getFullYear(), day.getMonth(), day.getDate(), sh, sm),
-    new Date(day.getFullYear(), day.getMonth(), day.getDate(), eh, em)
+    new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate(), sh, sm)),
+    new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate(), eh, em))
   ];
 }
 
