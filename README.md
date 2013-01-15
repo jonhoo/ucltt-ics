@@ -40,3 +40,10 @@ guide](https://api.heroku.com/signup/devcenter) or follow these quick steps:
   8. ```heroku open```
 
 Enjoy free hosting of the app.
+
+# Why? #
+Well, I was annoyed at having to log in to the UCL Timetable portal all the
+time, so I figured I'd do something about it. Had I taken the time to actually
+look around for a bit, I would have noticed that there was already a WebCal
+subscription URL built in, but I didn't see that until I'd finished. At least I
+got the experience of getting to play with Node and Heroku.
